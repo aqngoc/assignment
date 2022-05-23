@@ -155,7 +155,7 @@ require 'connect_db.php';
                                     <th>ID</th>
                                     <th>Tên bài tập</th>
                                     <th>Giáo viên giao bài</th>
-                                    <th style="text-align: center; width: 20px;">Hoàn thành</th>
+                                    <th style="text-align: center; width: 15%;">Hoàn thành</th>
                                 </tr>
                             </thead>
 
@@ -204,8 +204,8 @@ require 'connect_db.php';
                         <?php
                         $id_baitap = $_GET['id_baitap'];
 
-                        $conn = mysqli_connect('localhost','root','','assignment');
-                        $id_baitap = mysqli_real_escape_string($conn,$id_baitap);
+                        $conn = mysqli_connect('localhost', 'root', '', 'assignment');
+                        $id_baitap = mysqli_real_escape_string($conn, $id_baitap);
                         $sql = "SELECT * FROM baitap WHERE id_baitap=$id_baitap";
                         $result = mysqli_query($conn, $sql);
                         $result = mysqli_fetch_assoc($result);
@@ -213,16 +213,18 @@ require 'connect_db.php';
                         mysqli_close($conn);
                         echo "<h3>Bài tập: $tenbaitap</h3>";
 
-                        foreach (glob("./bailam/$id_baitap/*") as $baitap) {
+
                         ?>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Tên file</th>
-                                        <th style="text-align: center; width: 20px;">Download</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tên file</th>
+                                    <th style="text-align: center; width: 20px;">Download</th>
+                                </tr>
+                            </thead>
+                            <?php foreach (glob("./bailam/$id_baitap/*") as $baitap) { ?>
+                            <tbody>
+                                
                                     <td>
                                         <?php
                                         $thumuc =  "./bailam/$id_baitap/";
@@ -231,13 +233,15 @@ require 'connect_db.php';
                                         ?>
                                     </td>
                                     <td style="text-align: center"><?php echo "<a href='download.php?nama=" . $baitap . "'><img src='./image/download.png' ></a> "; ?></td>
-                                </tbody>
-                            </table>
+                                
+                            </tbody>
+                            <?php
+                                }
 
-                        <?php
-                        }
+                                ?>
+                        </table>
 
-                        ?>
+
 
 
                     </div>
