@@ -2,6 +2,8 @@
 ob_start();
 session_start();
 require 'connect_db.php';
+
+if(!empty($_SESSION['id'])){
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,22 +76,25 @@ require 'connect_db.php';
 
     <div class="container-fluid">
         <div class="row content">
-            <div class="col-sm-3 sidenav" style="width:15%">
+            <div class="col-sm-3 sidenav" style="width:20%">
                 <h4>Danh Mục</h4>
                 <div class="list-group">
-                    <a href="trangchu.php" class="list-group-item ">Giới Thiệu</a>
-                    <a href="quanlysinhvien.php" class="list-group-item ">Quản lý sinh viên</a>
-                    <a href="thongtincanhan.php" class="list-group-item">Thông tin cá nhân</a>
-                    <a href="danhsachnguoidung.php" class="list-group-item active">Danh sách người dùng</a>
-                    <?php 
-                    if(isset($_SESSION['role']) && $_SESSION['role']==0){
-                        echo '<a href="giaobai.php" class="list-group-item">Giao bài</a>';
-                    }else{
-                        echo '<a href="nopbai.php" class="list-group-item">Nộp bài</a>';
-                    }
-                    ?>
-                    <a href="challenge.php" class="list-group-item">Challenge</a>
-
+                <a href="trangchu.php" class="list-group-item ">Giới Thiệu</a>
+                    <?php if (!empty($_SESSION['id'])) { ?>
+                        <?php if ($_SESSION['role'] == 0) { ?>
+                            <a href="quanlysinhvien.php" class="list-group-item ">Quản lý sinh viên</a>
+                        <?php } ?>
+                        <a href="thongtincanhan.php" class="list-group-item">Thông tin cá nhân</a>
+                        <a href="danhsachnguoidung.php" class="list-group-item active">Danh sách người dùng</a>
+                        <?php
+                        if (isset($_SESSION['role']) && $_SESSION['role'] == 0) {
+                            echo '<a href="giaobai.php" class="list-group-item">Giao bài</a>';
+                        } else {
+                            echo '<a href="nopbai.php" class="list-group-item">Nộp bài</a>';
+                        }
+                        ?>
+                        <a href="challenge.php" class="list-group-item">Challenge</a>
+                    <?php } ?>
                 </div><br>
             </div>
 
@@ -159,7 +164,6 @@ require 'connect_db.php';
                     else $value_role = 'Sinh viên';
                     $name = $result['username'];
                     $value_username =  'value="' . $result['username'] . '"';
-                    $value_password = 'value="' . $result['password'] . '"';
                     $value_hoten = 'value="' . $result['hoten'] . '"';
                     $value_email = 'value="' . $result['email'] . '"';
                     $value_phone = 'value="' . $result['sdt'] . '"';
@@ -179,10 +183,6 @@ require 'connect_db.php';
                             <div class="form-group">
                                 <label>Username:</label><br>
                                 <input type="text" class="form-control" placeholder="Nhập Username" name="input_username" <?= $value_username ?> disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>Password:</label>
-                                <input type="password" class="form-control" placeholder="Nhập password" name="input_password" <?= $value_password ?> disabled>
                             </div>
                             <div class="form-group">
                                 <label>Họ tên:</label>
@@ -298,3 +298,8 @@ require 'connect_db.php';
 </body>
 
 </html>
+<?php
+}else{
+    header("Location: trangchu.php");
+}
+?>
