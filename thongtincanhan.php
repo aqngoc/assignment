@@ -191,10 +191,8 @@ require 'connect_db.php';
                     echo '<center><h1>Bạn phải đăng nhập mới sử dụng được chức năng này</h1></center>';
                 }
                     ?>
-
-
-
                     </div>
+                    
                     <div class="col-sm-6" style=" width: 500px ;">
                         <center>
                             <h1>Tin nhắn</h1>

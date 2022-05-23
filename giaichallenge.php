@@ -110,7 +110,7 @@ require 'connect_db.php';
                     mysqli_close($conn);
 
                     $result = mysqli_fetch_assoc($result);
-                    var_dump($result);
+                    // var_dump($result);
                     ?>
 
                     <form action="" method="POST">
@@ -136,14 +136,67 @@ require 'connect_db.php';
                     </form>
 
                     <?php
+                    function stripVN($str)
+                    {
+                        $str = preg_replace("/(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)/", 'a', $str);
+                        $str = preg_replace("/(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)/", 'e', $str);
+                        $str = preg_replace("/(ì|í|ị|ỉ|ĩ)/", 'i', $str);
+                        $str = preg_replace("/(ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ)/", 'o', $str);
+                        $str = preg_replace("/(ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ)/", 'u', $str);
+                        $str = preg_replace("/(ỳ|ý|ỵ|ỷ|ỹ)/", 'y', $str);
+                        $str = preg_replace("/(đ)/", 'd', $str);
+
+                        $str = preg_replace("/(À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ)/", 'A', $str);
+                        $str = preg_replace("/(È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ)/", 'E', $str);
+                        $str = preg_replace("/(Ì|Í|Ị|Ỉ|Ĩ)/", 'I', $str);
+                        $str = preg_replace("/(Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ)/", 'O', $str);
+                        $str = preg_replace("/(Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ)/", 'U', $str);
+                        $str = preg_replace("/(Ỳ|Ý|Ỵ|Ỷ|Ỹ)/", 'Y', $str);
+                        $str = preg_replace("/(Đ)/", 'D', $str);
+                        return $str;
+                    }
+
                     if (isset($_POST['click_submit_dapan'])) {
                         if (!empty($_POST['input_dapan'])) {
-                            $input_dapan = strtolower($_POST['input_dapan']);
-                            $dapan = $result['ten_filechallenge'];
+                            $input_dapan = $_POST['input_dapan'];
+                            $input_dapan = stripVN($input_dapan);
+                            $input_dapan = strtolower($input_dapan);
+                            $input_dapan = trim(preg_replace("/\s+/", " ", $input_dapan));
+                            // echo strlen($input_dapan);
 
-                            $dapan = substr($dapan, 0, -4);
-                            if($dapan == $input_dapan ){
-                                
+                            $dapan = $result['ten_filechallenge'];
+                            $dapan = strtolower(substr($dapan, 0, -4));
+
+                            // var_dump($dapan);
+
+                            if ($dapan == $input_dapan) {
+                    ?>
+                                <br>
+                                <h2>Chúc mừng bạn đã trả lời đúng challenge</h2>
+                                <h3>Nội dung file challenge:</h3>
+
+                                <?php
+                                $myfile = fopen("./challenge/" . $result['ten_filechallenge'], "r") or die("Unable to open file!");
+                                // Output one line until end-of-file
+                                while (!feof($myfile)) {
+                                    echo fgets($myfile) . "<br>";
+                                }
+                                fclose($myfile);
+
+                                $id_hocsinh = $result['id_hocsinh'];
+                                if (strpos($id_hocsinh, $_SESSION['id']) == false) {
+                                    $id_hocsinh = $id_hocsinh . ',' . $_SESSION['id'];
+                                    $sql = "UPDATE challenge SET id_hocsinh='$id_hocsinh' WHERE id_challenge=$id_challenge";
+                                    QueryData($sql);
+                                }
+
+                                ?>
+
+
+
+                    <?php
+                            } else {
+                                echo '<script>alert("Sai rồi :)")</script>';
                             }
                         } else {
                             echo '<script>alert("Vui lòng nhập đán án")</script>';

@@ -149,9 +149,9 @@ require 'connect_db.php';
                             //lấy tên file
                             $ten_filechallenge = $_FILES['input_filechallenge']['name'];
                             $ten_filechallenge = stripVN($ten_filechallenge);
-                            $ten_filechallenge = trim($ten_filechallenge);
+                            $ten_filechallenge = trim(preg_replace("/\s+/"," ", $ten_filechallenge));
 
-                            var_dump($ten_filechallenge);
+                            // var_dump($ten_filechallenge);
 
                             $ex = strtolower(pathinfo($ten_filechallenge, PATHINFO_EXTENSION));
 
@@ -189,7 +189,7 @@ require 'connect_db.php';
                                     <th>ID</th>
                                     <th>Tên challenge</th>
                                     <th>Người tạo challenge</th>
-                                    <th style="text-align: center; width: 20px;">Số người hoàn thành</th>
+                                    <th style="text-align: center; width: 25%;">Số người hoàn thành</th>
                                 </tr>
                             </thead>
 
@@ -261,10 +261,10 @@ require 'connect_db.php';
                                         //xử lý kiểm tra học sinh đã nộp bài tập này hay chưa
                                         $hocsinhhoanthanh = $row['id_hocsinh'];
                                         $hocsinhhoanthanh = explode(',', $hocsinhhoanthanh);
-                                        if (!in_array($_SESSION['id'], $hocsinhhoanthanh)) {
-                                            echo '<button type="button" class="btn btn-danger">Chưa làm</button>';
-                                        } else {
+                                        if (isset($_SESSION['id']) && in_array($_SESSION['id'], $hocsinhhoanthanh)) {
                                             echo '<button type="button" class="btn btn-success">Hoàn thành</button>';
+                                        } else {
+                                            echo '<button type="button" class="btn btn-danger">Chưa làm</button>';
                                         }
                                         ?>
 
