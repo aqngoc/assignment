@@ -72,8 +72,8 @@ require 'connect_db.php';
     </nav>
 
     <div class="container-fluid">
-        <div class="row content" style="height: 550px;">
-            <div class="col-sm-3 sidenav" style="width:300px">
+        <div class="row content">
+            <div class="col-sm-3 sidenav" style="width:15%">
                 <h4>Danh Mục</h4>
                 <div class="list-group">
                     <a href="trangchu.php" class="list-group-item ">Giới Thiệu</a>
@@ -97,7 +97,7 @@ require 'connect_db.php';
             if (isset($_SESSION['role']) && $_SESSION['role'] == 0) {
             ?>
 
-                <div class="container">
+                <div class="container" style="background-color: pink">
                     <?php
                     //lấy dữ liệu theo id mỗi khi người dùng thực hiện action view hoặc edit
 
@@ -143,7 +143,7 @@ require 'connect_db.php';
 
                     <!-- Form nhập/hiển thị thông tin -->
                     <div class="row">
-                        <div class="col-sm-6" style="width: 370px ;">
+                        <div class="col-sm-6" style="width: 40% ;">
                             <h1>Thông tin sinh viên</h1>
                             <form action="" method="POST">
                                 <div class="form-group">
@@ -260,7 +260,7 @@ require 'connect_db.php';
                             ?>
 
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-6" style="width: 58%">
                             <h1>Danh sách sinh viên</h1>
                             <br>
                             <table class="table table-bordered">

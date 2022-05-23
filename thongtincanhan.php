@@ -71,18 +71,18 @@ require 'connect_db.php';
         </div>
     </nav>
     <div class="container-fluid">
-        <div class="row content" style="height: 550px;">
-            <div class="col-sm-3 sidenav" style="width:300px">
+        <div class="row content">
+            <div class="col-sm-3 sidenav" style="width:15%">
                 <h4>Danh Mục</h4>
                 <div class="list-group">
                     <a href="trangchu.php" class="list-group-item ">Giới Thiệu</a>
                     <a href="quanlysinhvien.php" class="list-group-item">Quản lý sinh viên</a>
                     <a href="thongtincanhan.php" class="list-group-item active">Thông tin cá nhân</a>
                     <a href="danhsachnguoidung.php" class="list-group-item">Danh sách người dùng</a>
-                    <?php 
-                    if(isset($_SESSION['role']) && $_SESSION['role']==0){
+                    <?php
+                    if (isset($_SESSION['role']) && $_SESSION['role'] == 0) {
                         echo '<a href="giaobai.php" class="list-group-item">Giao bài</a>';
-                    }else{
+                    } else {
                         echo '<a href="nopbai.php" class="list-group-item">Nộp bài</a>';
                     }
                     ?>
@@ -110,7 +110,7 @@ require 'connect_db.php';
                     else $value_role = 'Sinh viên';
 
                 ?>
-                    <div class="col-sm-6" style="width: 500px ;">
+                    <div class="col-sm-6" style="width: 40% ;">
                         <!-- <div style="width: 500px;"> -->
                         <center>
                             <h1>Thông tin cá nhân</h1>
@@ -147,53 +147,49 @@ require 'connect_db.php';
                             <button type="submit" class="btn btn-primary" name="click_submit">Cập nhật</button>
                         </form>
 
-                    <?php
-                    if (isset($_POST['click_submit'])) {
-                        if (
-                            !empty($_POST['input_email']) && !empty($_POST['input_phone'])
-                        ) {
-                            // $input_username = $_POST['input_username'];
-                            // $input_password = hash('sha256', $_POST['input_password']);
-                            // $input_hoten = $_POST['input_hoten'];
-                            $input_email = $_POST['input_email'];
-                            $input_phone = $_POST['input_phone'];
+                        <?php
+                        if (isset($_POST['click_submit'])) {
+                            if (
+                                !empty($_POST['input_email']) && !empty($_POST['input_phone'])
+                            ) {
+                                // $input_username = $_POST['input_username'];
+                                // $input_password = hash('sha256', $_POST['input_password']);
+                                // $input_hoten = $_POST['input_hoten'];
+                                $input_email = $_POST['input_email'];
+                                $input_phone = $_POST['input_phone'];
 
-                            //Kiểm tra email và phone có đúng định dạng
-                            $pattern_email = "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,7}$/";
-                            $pattern_phone = "/^[0-9]{10}$/";
+                                //Kiểm tra email và phone có đúng định dạng
+                                $pattern_email = "/^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,7}$/";
+                                $pattern_phone = "/^[0-9]{10}$/";
 
-                            if (preg_match($pattern_email, $input_email)) {
-                                if (preg_match($pattern_phone, $input_phone)) {
-                                    //xử lý khi email và phone đã đúng định dạng
-                                    $conn = mysqli_connect('localhost', 'root', '', 'assignment');
-                                    if ($conn->connect_error) {
-                                        echo '<script>alert("Connect Database fail!")</script>';
-                                        die();
+                                if (preg_match($pattern_email, $input_email)) {
+                                    if (preg_match($pattern_phone, $input_phone)) {
+                                        //xử lý khi email và phone đã đúng định dạng
+                                        $conn = mysqli_connect('localhost', 'root', '', 'assignment');
+                                        if ($conn->connect_error) {
+                                            echo '<script>alert("Connect Database fail!")</script>';
+                                            die();
+                                        }
+                                        $stmt_update = $conn->prepare("UPDATE user SET email=?, sdt=? WHERE id=?");
+                                        $stmt_update->bind_param("ssi", $input_email, $input_phone, $_SESSION['id']);
+                                        $stmt_update->execute();
+                                        $stmt_update->close();
+                                        $conn->close();
+                                        echo '<script>alert("Cập nhật thành công")</script>';
+                                        header("refresh: 0");
+                                    } else {
+                                        echo '<script>alert("Số điện thoại không hợp lệ")</script>';
                                     }
-                                    $stmt_update = $conn->prepare("UPDATE user SET email=?, sdt=? WHERE id=?");
-                                    $stmt_update->bind_param("ssi", $input_email, $input_phone, $_SESSION['id']);
-                                    $stmt_update->execute();
-                                    $stmt_update->close();
-                                    $conn->close();
-                                    echo '<script>alert("Cập nhật thành công")</script>';
-                                    header("refresh: 0");
                                 } else {
-                                    echo '<script>alert("Số điện thoại không hợp lệ")</script>';
+                                    echo '<script>alert("Email không hợp lệ")</script>';
                                 }
                             } else {
-                                echo '<script>alert("Email không hợp lệ")</script>';
+                                echo '<script>alert("Không được để trống bất kỳ trường thông tin nào")</script>';
                             }
-                        } else {
-                            echo '<script>alert("Không được để trống bất kỳ trường thông tin nào")</script>';
                         }
-                    }
-                } else {
-                    echo '<center><h1>Bạn phải đăng nhập mới sử dụng được chức năng này</h1></center>';
-                }
-                    ?>
+                        ?>
                     </div>
-                    
-                    <div class="col-sm-6" style=" width: 500px ;">
+                    <div class="col-sm-6" style=" width: 30% ;">
                         <center>
                             <h1>Tin nhắn</h1>
                         </center>
@@ -323,8 +319,17 @@ require 'connect_db.php';
 
                         </table>
                     </div>
+
+                <?php
+                } else {
+                    echo '<center><h1>Bạn phải đăng nhập mới sử dụng được chức năng này</h1></center>';
+                }
+                ?>
             </div>
+
+
         </div>
+    </div>
     </div>
 </body>
 

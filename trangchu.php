@@ -73,8 +73,8 @@ setcookie("PHPSESSID", $_COOKIE['PHPSESSID'], time() + (86400 * 30), "/", null, 
     </nav>
 
     <div class="container-fluid">
-        <div class="row content" style="height: 550px;">
-            <div class="col-sm-3 sidenav" style="width:300px">
+        <div class="row content" >
+            <div class="col-sm-3 sidenav" style="width:15%">
                 <h4>Danh Mục</h4>
                 <div class="list-group">
                     <a href="trangchu.php" class="list-group-item active">Giới Thiệu</a>

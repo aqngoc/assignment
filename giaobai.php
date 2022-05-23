@@ -73,8 +73,8 @@ require 'connect_db.php';
     </nav>
 
     <div class="container-fluid">
-        <div class="row content" style="height: 550px;">
-            <div class="col-sm-3 sidenav" style="width:300px">
+        <div class="row content" >
+            <div class="col-sm-3 sidenav" style="width:15%">
                 <h4>Danh Mục</h4>
                 <div class="list-group">
                     <a href="trangchu.php" class="list-group-item ">Giới Thiệu</a>
@@ -168,16 +168,20 @@ require 'connect_db.php';
                                     <td><?= $row['id_baitap'] ?></td>
                                     <td><?= $row['ten_baitap'] ?></td>
                                     <td><?= $row['hoten'] ?></td>
-                                    <td style="text-align: center;"><a href="?id_baitap=<?= $row['id_baitap'] ?>"><?php
-                                                                                                                    $str = $row['hocsinhhoanthanh'];
-                                                                                                                    if ($str == '') {
-                                                                                                                        echo 0;
-                                                                                                                    } else {
-                                                                                                                        $arr = explode(',', $str);
-                                                                                                                        echo count($arr) - 1;
-                                                                                                                    }
+                                    <td style="text-align: center;">
+                                        <a href="?id_baitap=<?= $row['id_baitap'] ?>">
+                                            <?php
+                                            $str = $row['hocsinhhoanthanh'];
+                                            if ($str == '') {
+                                                echo 0;
+                                            } else {
+                                                $arr = explode(',', $str);
+                                                echo count($arr) - 1;
+                                            }
 
-                                                                                                                    ?></a></td>
+                                            ?>
+                                        </a>
+                                    </td>
                                 </tbody>
                             <?php
                             }
@@ -223,8 +227,8 @@ require 'connect_db.php';
                                 </tr>
                             </thead>
                             <?php foreach (glob("./bailam/$id_baitap/*") as $baitap) { ?>
-                            <tbody>
-                                
+                                <tbody>
+
                                     <td>
                                         <?php
                                         $thumuc =  "./bailam/$id_baitap/";
@@ -233,12 +237,12 @@ require 'connect_db.php';
                                         ?>
                                     </td>
                                     <td style="text-align: center"><?php echo "<a href='download.php?nama=" . $baitap . "'><img src='./image/download.png' ></a> "; ?></td>
-                                
-                            </tbody>
-                            <?php
-                                }
 
-                                ?>
+                                </tbody>
+                            <?php
+                            }
+
+                            ?>
                         </table>
 
 
