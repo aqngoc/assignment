@@ -1,7 +1,9 @@
 <?php
 ob_start();
 session_start();
-setcookie("PHPSESSID", $_COOKIE['PHPSESSID'], time() + (86400 * 30), "/", null, null, true);
+if (!empty($_SESSION['id'])) {
+    setcookie("PHPSESSID", $_COOKIE['PHPSESSID'], time() + (86400 * 30), "/", null, null, true);
+}
 ?>
 
 <!DOCTYPE html>
@@ -73,11 +75,11 @@ setcookie("PHPSESSID", $_COOKIE['PHPSESSID'], time() + (86400 * 30), "/", null, 
     </nav>
 
     <div class="container-fluid">
-        <div class="row content" >
+        <div class="row content">
             <div class="col-sm-3 sidenav" style="width:20%">
                 <h4>Danh Mục</h4>
                 <div class="list-group">
-                <a href="trangchu.php" class="list-group-item active">Giới Thiệu</a>
+                    <a href="trangchu.php" class="list-group-item active">Giới Thiệu</a>
                     <?php if (!empty($_SESSION['id'])) { ?>
                         <?php if ($_SESSION['role'] == 0) { ?>
                             <a href="quanlysinhvien.php" class="list-group-item ">Quản lý sinh viên</a>
