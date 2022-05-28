@@ -150,7 +150,8 @@ if (!empty($_SESSION['id'])) {
                                         $arrresult1 = mysqli_fetch_assoc($result1);
                                         // var_dump($arrresult1);
                                         if(mysqli_num_rows($result1)>0){
-                                            echo '<a href="download.php?nama=/bailam/'.$row['id_baitap'].'/'.$arrresult1["ten_filebailam"].'" type="button" class="btn btn-success">Hoàn thành</a>';
+                                            echo '<a href="download.php?nama=/bailam/'.$row['id_baitap'].'/'.htmlspecialchars($arrresult1["ten_filebailam"]).'" type="button" class="btn btn-success">Hoàn thành</a>';
+                                            
                                         }else{
                                             echo '<a type="button" class="btn btn-danger">Chưa làm</a>';
                                         }
@@ -229,8 +230,6 @@ if (!empty($_SESSION['id'])) {
                                 echo '<script>alert("Nộp bài thành công")</script>';
                             }
                         }
-
-
                         ?>
                     </div>
 

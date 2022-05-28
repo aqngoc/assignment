@@ -42,26 +42,45 @@ session_start();
                     die();
                 }
 
-                $stmt = $conn->prepare("SELECT * FROM user WHERE username=? AND password=?;");
-                $stmt->bind_param("ss", $input_username, $input_password);
+                $stmt = $conn->prepare("SELECT * FROM user WHERE username=?");
+                $stmt->bind_param("s", $input_username);
                 $stmt->execute();
 
                 //Lấy kết quả, kiểm tra nếu tồn tại bản ghi -> tài khoản và mật khẩu chính xác
                 $result = $stmt->get_result();
-                if (($result->num_rows) > 0) {
-                    //tạo mới session khi đăng nhập thành công
+                $arrresult = mysqli_fetch_assoc($result);
+                if ($arrresult['block'] <= 5) {
+                    if (($result->num_rows) > 0 && $arrresult['password'] === $input_password) {
 
-                    $result = mysqli_fetch_assoc($result);
-                    $_SESSION['username'] = $result['username'];
-                    $_SESSION['role'] = $result['role'];
-                    $_SESSION['id'] = $result['id'];
-                    // sleep(1);
-                    // echo '<script>alert("Login thành công")</script>';       
-                    session_regenerate_id();
-                    header("Location: trangchu.php");
-                } else {
-                    echo '<script>alert("Tài khoản hoặc mật khẩu không chính xác")</script>';
+                        $result = mysqli_fetch_assoc($result);
+                        $_SESSION['username'] = $arrresult['username'];
+                        $_SESSION['role'] = $arrresult['role'];
+                        $_SESSION['id'] = $arrresult['id'];
+                        // echo '<script>alert("Login thành công")</script>';       
+                        session_regenerate_id();
+
+                        header("Location: trangchu.php");
+                    } else {
+                        $stmt = $conn->prepare("UPDATE user SET block=block+1 WHERE username=?");
+                        $stmt->bind_param("s", $input_username);
+                        $stmt->execute();
+
+                        echo '<script>alert("Tài khoản hoặc mật khẩu không chính xác")</script>';
+                    }
+                }else{
+                    echo '<script>alert("Tài khoản của bạn đã bị khóa")</script>';
                 }
+
+                // $input_username = mysqli_real_escape_string($conn, $input_username);
+                // $sql = 'SELECT * FROM user WHERE username="'.$input_username.'"';
+                // $result = mysqli_query($conn, $sql);
+                // $result = mysqli_fetch_assoc($result);
+
+                // if($result != null && $result['password']===$input_password){
+
+                // }else{
+                //     echo '<script>alert("Tài khoản hoặc mật khẩu không chính xác")</script>';
+                // }
 
                 $stmt->close();
                 $conn->close();
